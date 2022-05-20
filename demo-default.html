@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <title>Option Selector</title>
     <script src="jquery.3.1.1/jquery-3.1.1.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="css/default-rtl.css" />
+    <link rel="stylesheet" type="text/css" href="css/default.css" />
     <script type="text/javascript" src="lib/option-selector.js"></script>
 </head>
 
@@ -21,7 +21,7 @@
     <br /><br />
     <div id="option-selector"></div>
     <br /><br />
-    <input type="text" id="selected-text" />
+    <div id="selected-text"></div>
 </body>
 
 </html>
@@ -68,16 +68,20 @@
                 },
                 onSelectionChanged: function (e) {
                     console.log("event triggered - onSelectionChanged", e, data[e.activeListIndex][e.activeListItemIndex].value);
-                    $("#selected-text").val(
-                        data[e.activeListIndex][e.activeListItemIndex].value +
-                        " (" + e.activeListIndex + "/" + e.activeListItemIndex + ")");
+                    $("#selected-text")
+                        .empty()
+                        .append("<div>Selected Item Value: " + data[e.activeListIndex][e.activeListItemIndex].value + "</div>")
+                        .append("<div>Selected List Index: " + e.activeListIndex + "</div>")
+                        .append("<div>Selected Item Index: " + e.activeListItemIndex + "</div>");
                 },
                 onVisibilityChanged: function (e) {
                     console.log("event triggered - onVisibilityChanged", e);
                 }
             },
-            formatter: (element) => {
-                return $("<div style='color: #FDEA65;'>" + element.label + "</div>");
+            extensions: {
+                formatter: (element) => {
+                    return $("<div>" + element.label + "</div>");
+                }
             }
         });
 
