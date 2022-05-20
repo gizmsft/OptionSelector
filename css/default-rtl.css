@@ -40,6 +40,8 @@
 
 /* child list item within child list */
 .selector-list-item {
+    text-align: right;
+    direction: rtl;
     padding: 3px 5px 3px 10px;
     color: #222222;
     cursor: pointer;
