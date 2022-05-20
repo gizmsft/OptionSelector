@@ -1,0 +1,99 @@
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title>Option Selector</title>
+    <script src="jquery.3.1.1/jquery-3.1.1.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/default-rtl.css" />
+    <script type="text/javascript" src="lib/option-selector.js"></script>
+</head>
+
+<body>
+    <div>
+        Option selector is a two dimentional item list. which provides APIs to change item selection.
+        As a use case, Option Selector is used as a floating list for auto complete controls. OptionSelector
+        reqires JQuery.
+    </div>
+    <br /><br />
+    <button id="toggle-visibility">Toggle Visibility</button>
+    <br /><br />
+    <button id="toggle-enable">Enable/Disable</button>
+    <br /><br />
+    <div id="option-selector"></div>
+    <br /><br />
+    <div id="selected-text"></div>
+</body>
+
+</html>
+
+<script type="text/javascript">
+  
+    $(document).ready(function () {
+        var data = [
+            [
+                { label: "آئیٹم1", value: "ایک" },
+                { label: "آئیٹم2", value: "دو" },
+                { label: "آئیٹم3", value: "تین" },
+                { label: "آئیٹم4", value: "چار" },
+                { label: "آئیٹم5", value: "پانچ" }
+            ],
+            [
+                { label: "آئیٹم1", value: "ایک" },
+                { label: "آئیٹم2", value: "دو" },
+                { label: "آئیٹم3", value: "تین" },
+                { label: "آئیٹم4", value: "چار" },
+                { label: "آئیٹم5", value: "پانچ" }
+            ]
+        ];
+
+        var _OptionSelector = new OptionSelector({
+            lists: [
+                {
+                    listClass: "list1",
+                    listItemClass: "listitem1",
+                    selectedListItemClass: "listitem1selected",
+                },
+                {
+                    listClass: "list2",
+                    listItemClass: "listitem2",
+                    selectedListItemClass: "listitem2selected",
+                }
+            ],
+            defaultListIndex: 0,
+            defaultIndex: 0,
+            data: data,
+            events: {
+                onClicked: function (e) {
+                    console.log("event triggered - onClicked", e);
+                },
+                onSelectionChanged: function (e) {
+                    console.log("event triggered - onSelectionChanged", e, data[e.activeListIndex][e.activeListItemIndex].value);
+                    $("#selected-text")
+                        .empty()
+                        .append("<div>Selected Item Value: " + data[e.activeListIndex][e.activeListItemIndex].value + "</div>")
+                        .append("<div>Selected List Index: " + e.activeListIndex + "</div>")
+                        .append("<div>Selected Item Index: " + e.activeListItemIndex + "</div>");
+                },
+                onVisibilityChanged: function (e) {
+                    console.log("event triggered - onVisibilityChanged", e);
+                }
+            },
+            extensions: {
+                formatter: (element) => {
+                    return $("<div>" + element.label + "</div>");
+                }
+            }
+        });
+
+        $("#option-selector").append(_OptionSelector.getUIRoot());
+
+        $("#toggle-visibility").on("click", function (e) {
+            _OptionSelector.setVisible(!_OptionSelector.getVisible());
+        });
+
+       $("#toggle-enable").on("click", function (e) {
+            _OptionSelector.setEnabled(!_OptionSelector.getEnabled());
+        });
+
+    });
+</script>
