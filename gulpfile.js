@@ -4,21 +4,21 @@ const uglifyPlugin = require('gulp-uglify');
 const renamePlugin = require('gulp-rename');
 const minifyCssPlugin = require('gulp-clean-css');
 
-var copyCss = function (callback) {
+var copyCssTask = function (callback) {
     src('./css/*.css')
         .pipe(dest('./dist/css'));
 
     callback();
 }
 
-var copyJs = function (callback) {
+var copyJsTask = function (callback) {
     src('./lib/*.js')
         .pipe(dest('./dist/js'));
 
     callback();
 }
 
-var minifyCss = function (callback) {
+var minifyCssTask = function (callback) {
     src('./css/*.css')
         .pipe(sassPlugin())
         .pipe(minifyCssPlugin())
@@ -30,7 +30,7 @@ var minifyCss = function (callback) {
     callback();
 }
 
-var minifyJs = function (callback) {
+var minifyJsTask = function (callback) {
     src('./lib/*.js')
         .pipe(uglifyPlugin())
         .pipe(renamePlugin(function (path) {
@@ -42,14 +42,16 @@ var minifyJs = function (callback) {
 }
 
 var defaultTask = function (callback) {
-    copyCss(callback);
-    copyJs(callback);
-    minifyCss(callback);
-    minifyJs(callback);
+    copyCssTask(callback);
+    copyJsTask(callback);
+    minifyCssTask(callback);
+    minifyJsTask(callback);
 
     callback();
 }
 
+exports.copyCss = copyCssTask;
+exports.copyJs = copyJsTask;
+exports.minifyCss = minifyCssTask;
+exports.minifyJs = minifyJsTask;
 exports.default = defaultTask;
-exports.minifyJs = minifyJs;
-exports.minifyCss = minifyCss;
