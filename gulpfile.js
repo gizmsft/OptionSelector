@@ -1,10 +1,30 @@
 const { src, dest } = require('gulp');
-const sassPlugin = require('gulp-sass');
+const sassPlugin = require('gulp-sass')(require('sass'));
 const uglifyPlugin = require('gulp-uglify');
+const renamePlugin = require('gulp-rename');
+const minifyCssPlugin = require('gulp-clean-css');
+
+var copyCss = function (callback) {
+    src('./css/*.css')
+        .pipe(dest('./dist/css'));
+
+    callback();
+}
+
+var copyJs = function (callback) {
+    src('./lib/*.js')
+        .pipe(dest('./dist/js'));
+
+    callback();
+}
 
 var minifyCss = function (callback) {
     src('./css/*.css')
-        .pipe(sassPlugin().on('error', sassPlugin.logError))
+        .pipe(sassPlugin())
+        .pipe(minifyCssPlugin())
+        .pipe(renamePlugin(function (path) {
+            path.basename += '.min';
+        }))
         .pipe(dest('./dist/css'));
 
     callback();
@@ -12,14 +32,18 @@ var minifyCss = function (callback) {
 
 var minifyJs = function (callback) {
     src('./lib/*.js')
-        .pipe(uglifyPlugin().on('error', uglifyPlugin.logError))
+        .pipe(uglifyPlugin())
+        .pipe(renamePlugin(function (path) {
+            path.basename += '.min';
+        }))
         .pipe(dest('./dist/js'));
 
-    // place code for your default task here
     callback();
 }
 
 var defaultTask = function (callback) {
+    //copyCss(callback);
+    copyJs(callback);
     minifyCss(callback);
     minifyJs(callback);
 
