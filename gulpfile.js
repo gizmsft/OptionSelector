@@ -42,7 +42,7 @@ var minifyJs = function (callback) {
 }
 
 var defaultTask = function (callback) {
-    //copyCss(callback);
+    copyCss(callback);
     copyJs(callback);
     minifyCss(callback);
     minifyJs(callback);
