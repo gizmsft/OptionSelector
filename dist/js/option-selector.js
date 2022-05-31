@@ -21,7 +21,7 @@
             rootListItemClass: "root-selector-list-item",
             listClass: "selector-list",
             listItemClass: "selector-list-item",
-            selectedListItemClass: "selector-list-selected-item",
+            selectedListItemClass: "selector-list-item-selected",
         },
         mainListTemplate: "<ul></ul>",
         mainListItemTemplate: "<li></li>",
@@ -190,10 +190,10 @@
 
                     $children.each(function (i, item) {
                         if (j != x) {
-                            decorateItem(selectedClass, $(item), -1, i);
+                            decorateItem(selectedClass, $(item), x, -1, i);
                         }
                         else {
-                            decorateItem(selectedClass, $(item), y, i);
+                            decorateItem(selectedClass, $(item), x, y, i);
                         }
                     });
 
@@ -258,7 +258,7 @@
                             $listItem.text(dataItem);
                         }
 
-                        decorateItem(listInfo.selectedListItemClass, $listItem, -1, i);
+                        decorateItem(listInfo.selectedListItemClass, $listItem, -1, -1, i);
                         $list.append($listItem);
                     });
                 }
@@ -267,12 +267,20 @@
     }
 
     // decorates item by adding/removing css classes
-    var decorateItem = function (cssClass, item, selIndex, currIndex) {
+    var decorateItem = function (cssClass, item, currListIndex, selIndex, currIndex) {
+        var selectedCssClass = null;
+
+        if (currListIndex > -1) {
+            selectedCssClass = local.settings.lists[currListIndex].selectedItemClass;
+        }
+
+        selectedCssClass = selectedCssClass || local.settings.css.selectedListItemClass;
+
         if (selIndex != currIndex) {
-            item.removeClass(local.settings.css.selectedListItemClass).removeClass(cssClass);
+            item.removeClass(selectedCssClass).removeClass(cssClass);
         }
         else if (!item.hasClass(cssClass)) {
-            item.addClass(local.settings.css.selectedListItemClass).addClass(cssClass);
+            item.addClass(selectedCssClass).addClass(cssClass);
         }
     }
 
